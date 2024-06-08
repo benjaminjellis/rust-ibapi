@@ -1,4 +1,5 @@
 use std::convert::From;
+use std::fmt::write;
 use std::fmt::Debug;
 use std::string::ToString;
 
@@ -150,6 +151,21 @@ pub struct Contract {
     pub description: String,
 }
 
+pub enum OptionRight {
+    Call,
+    Put,
+}
+
+impl std::fmt::Display for OptionRight {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let right_as_string_slice = match self {
+            OptionRight::Call => "CALL",
+            OptionRight::Put => "PUT",
+        };
+        write!(f, "{}", right_as_string_slice)
+    }
+}
+
 impl Contract {
     /// Creates stock contract from specified symbol
     /// currency defaults to USD and SMART exchange.
@@ -169,6 +185,19 @@ impl Contract {
             symbol: symbol.to_string(),
             security_type: SecurityType::Future,
             currency: "USD".to_string(),
+            ..Default::default()
+        }
+    }
+
+    pub fn option(symbol: &str, last_trade_date_or_contract_month: &str, strike: f64, right: OptionRight, multiplier: String) -> Contract {
+        Contract {
+            symbol: symbol.to_string(),
+            last_trade_date_or_contract_month: last_trade_date_or_contract_month.to_string(),
+            strike,
+            right: right.to_string(),
+            exchange: "SMART".to_string(),
+            currency: "USD".to_string(),
+            multiplier,
             ..Default::default()
         }
     }
