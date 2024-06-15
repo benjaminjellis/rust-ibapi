@@ -189,7 +189,14 @@ impl Contract {
         }
     }
 
-    pub fn option(symbol: &str, last_trade_date_or_contract_month: &str, strike: f64, right: OptionRight, multiplier: String) -> Contract {
+    /// Create an option contract for the specifed symbol
+    ///
+    /// # Arguments
+    /// * `symbol` - The underlying's asset symbol.
+    /// * `last_trade_date_or_contract_month` - The contract's last trading day or contract month (for Options and Futures). Strings with format YYYYMM will be interpreted as the Contract Month whereas YYYYMMDD will be interpreted as Last Trading Day.
+    /// * `strike` - The option's strike price.
+    /// * `right` - Either Put or Call (i.e. Options)
+    pub fn option(symbol: &str, last_trade_date_or_contract_month: &str, strike: f64, right: OptionRight) -> Contract {
         Contract {
             symbol: symbol.to_string(),
             last_trade_date_or_contract_month: last_trade_date_or_contract_month.to_string(),
@@ -197,7 +204,6 @@ impl Contract {
             right: right.to_string(),
             exchange: "SMART".to_string(),
             currency: "USD".to_string(),
-            multiplier,
             ..Default::default()
         }
     }
